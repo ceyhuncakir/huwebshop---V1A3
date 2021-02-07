@@ -1,0 +1,125 @@
+{
+    "_id" : "2583",
+    "_preferences" : [
+        "brand.Andrelon",
+        "category.Gezond & verzorging",
+        "gender.Vrouw",
+        "sub_category.Haarverzorging",
+        "sub_sub_category.Shampoo",
+        "promos.3 voor 6",
+        "product_size.300 ml"
+    ],
+    "brand" : "Andrelon",
+    "category" : "Gezond & verzorging",
+    "color" : null,
+    "description" : "2 in 1 is een verzorgende shampoo en conditioner ineen. Het biedt de juiste combinatie tussen een frisse reiniging en een mild voedende verzorging. Met 2 in 1 is je haar gezond, glanzend en makkelijk doorkambaar. Je haar is weer helemaal fris.&nbsp;",
+    "fast_mover" : false,
+    "gender" : "Vrouw",
+    "herhaalaankopen" : true, // Herhaalaankopen zijn producten die klanten vaker kopen. Een auto is bijvoorbeeld géén herhaalaankoop.
+    "images" : [
+        [
+        ]
+    ],
+    "name" : "Andrélon Shampoo 2 In 1 300 ml",
+    "predict_out_of_stock_date" : "2018-12-27",
+    "price" : {
+        "cost_price" : null,
+        "deeplink" : null,
+        "description" : null,
+        "discount" : 300,
+        "id" : null,
+        "images" : [
+
+        ],
+        "label" : null,
+        "mrsp" : 229,
+        "name" : null,
+        "properties" : null,
+        "recommendable" : false,
+        "selling_price" : 229
+    },
+    "properties" : {
+        "availability" : "24",
+        "bundel_sku" : "38815",
+        "cost_price" : "18",
+        "discount" : "3 voor 6",
+        "doelgroep" : "Vrouwen",
+        "eenheid" : "ml",
+        "factor" : null,
+        "folder_actief" : "Disabled",
+        "gebruik" : null,
+        "geschiktvoor" : null,
+        "geursoort" : null,
+        "huidconditie" : null,
+        "huidtype" : null,
+        "huidtypegezicht" : null,
+        "inhoud" : "300 ml",
+        "klacht" : "}",
+        "kleur" : null,
+        "leeftijd" : null,
+        "mid" : "953",
+        "online_only" : null,
+        "serie" : "2 in 1",
+        "soort" : "Shampoo",
+        "soorthaarverzorging" : null,
+        "soortmondverzorging" : null,
+        "sterkte" : null,
+        "stock" : "24",
+        "tax" : "BTW_Hoog",
+        "type" : null,
+        "typehaarkleuring" : null,
+        "typetandenborstel" : null,
+        "variant" : null,
+        "waterproof" : null,
+        "weekdeal" : false,
+        "weekdeal_from" : null,
+        "weekdeal_to" : null
+    },
+    "recommendable" : true,
+    "rivals" : [
+        {
+            "name" : "drogistplein.nl",
+            "price" : 139
+        },
+        {
+            "name" : "drogisterij.net",
+            "price" : 249
+        },
+        {
+            "name" : "drogist.nl",
+            "price" : 359
+        },
+        {
+            "name" : "drogist.nl",
+            "price" : 379
+        },
+        {
+            "name" : "kruidvat.nl",
+            "price" : 379
+        },
+        {
+            "name" : "ah.nl",
+            "price" : 379
+        }
+    ],
+    "size" : null,
+    "sm" : {
+        "is_active" : true,
+        "last_updated" : "2018-12-14T03:51:34.069+0000",
+        "rivals_updated" : "2018-12-14 03:51:34.061337",
+        "type" : "dict"
+    },
+    "stock" : [
+        {
+            "date" : "2018-03-29",
+            "stock_level" : 13
+        },
+        {
+            "date" : "2018-03-30",
+            "stock_level" : 61
+        },
+    ],
+    "sub_category" : "Haarverzorging",
+    "sub_sub_category" : "Shampoo",
+    "sub_sub_sub_category" : null
+}
