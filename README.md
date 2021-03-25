@@ -9,6 +9,7 @@ Izabelle Auriaux : student nummer : 1762808 : Email: izabelle.auriaux@student.hu
 Wytze A. Ketel : student nummer : 1797080 : Email : watze.ketel@student.hu.nl<br/>
 
 # Instructies
+In de onderstaande kopjes (opstarten) (huw.py) (huw_recommend.py) staan de instructies waar je aan moet voldoen om de huwebshop werken te krijgen
 
 # Huw.py
 Verander de volgende regels binnen de huw.py bestand
@@ -22,11 +23,18 @@ Regel 61 | self.database = self.client.huwebshop NAAR self.database = self.clien
 # Huw_recommend.py
 Verander de volgende regels binnen de huw_recommend.py bestand
 
-
 ```
 Regel 15 | dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majority' NAAR dbstring = 'mongodb://EIGEN MONGODB USERNAME:EIGEN MONGODB PASSWORD@127.0.0.1/EIGEN MONGODB DATABASE?retryWrites=true&w=majority'
 Regel 26 | database = client.huwebshop NAAR database = client.EIGEN MONGODB DATABASE
 ```
+
+# Opstarten
+Door op de gegeven bestand (startup instructions.txt) te klikken zie je de startup commands. Met deze startup commands kan je de huwebshop werkent krijgen door het in een command prompt in te vullen. Zie onderstaande afbeeldingen ↓
+
+![](Gitimg/Afbeelding1.png)
+
+![](Gitimg/Afbeelding2.png)
+
 
 # Versie
 
