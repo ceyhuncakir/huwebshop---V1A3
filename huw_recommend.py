@@ -3,6 +3,9 @@ from flask_restful import Api, Resource, reqparse
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from main import *
+import random
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -10,10 +13,10 @@ api = Api(app)
 # We define these variables to (optionally) connect to an external MongoDB
 # instance.
 envvals = ["MONGODBUSER","MONGODBPASSWORD","MONGODBSERVER"]
-dbstring = 'mongodb+srv://admin:eKvUxY8a1piY4zKd@huwebshop.2pofl.mongodb.net/webshop?retryWrites=true&w=majority'
+dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majority'
 
 # Since we are asked to pass a class rather than an instance of the class to the
-# add_resource method, we open the connection to the database outside of the 
+# add_resource method, we open the connection to the database outside of the
 # Recom class.
 load_dotenv()
 if os.getenv(envvals[0]) is not None:
@@ -21,19 +24,58 @@ if os.getenv(envvals[0]) is not None:
     client = MongoClient(dbstring)
 else:
     client = MongoClient()
-database = client.huwebshop 
+database = client.huwebshop
 
 class Recom(Resource):
     """ This class represents the REST API that provides the recommendations for
     the webshop. At the moment, the API simply returns a random set of products
     to recommend."""
 
+    # def fetch_content_prods(self, profileid):
+    #     prodlist = []
+
+    #     db, cursor = mysql_connector("root", "", "test")
+    #     cursor.execute("SELECT `product_1`, `product_2`, `product_3`, `product_4` FROM `content_filtering` WHERE `id` = '%s'" % profileid)
+    #     profiles = cursor.fetchall()
+
+    #     for i in profiles:
+    #         for m in i:
+    #             prodlist.append(m)
+
+    #     sql_closer(db, cursor)
+
+    #     return prodlist
+
+    # def fetch_collaborative_prods(self, profileid):
+    #     prodlist = []
+
+    #     db, cursor = mysql_connector("root", "", "test")
+    #     cursor.execute("SELECT `product_1`, `product_2`, `product_3`, `product_4` FROM `collaborative_filtering` WHERE `id` = '%s'" % profileid)
+    #     profiles = cursor.fetchall()
+
+    #     for i in profiles:
+    #         for m in i:
+    #             prodlist.append(m)
+
+    #     sql_closer(db, cursor)
+
+    #     return prodlist
+
     def get(self, profileid, count):
+
+        #prodids_collab = self.fetch_collaborative_prods(profileid)
+        #prodids_content = self.fetch_content_prods(profileid)
+
         """ This function represents the handler for GET requests coming in
         through the API. It currently returns a random sample of products. """
         randcursor = database.products.aggregate([{ '$sample': { 'size': count } }])
         prodids = list(map(lambda x: x['_id'], list(randcursor)))
+
+        # if profileid == "5a3e2f8ba82561000176c70a":
+        #     return prodids_content, 200
+        # else:
         return prodids, 200
+
 
 # This method binds the Recom class to the REST API, to parse specifically
 # requests in the format described below.

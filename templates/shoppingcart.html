@@ -3,18 +3,22 @@
 {% if packet.itemsincart %}
 <div id="products">
 	{% for product in packet.itemsincart %}
-	<div class="productpageblock hublueborder">
+	<div id="shoppingcartitem" class="productpageblock hublueborder">
 		<a href="/productdetail/{{ product.id }}">
+			<img id="placeholder_product" src="/static/productimages/product-placeholder.jpg">
 			<div class="productname">{{ product.name }}</div>
 			<div class="productprice">{{ product.price }}</div>
 			<div class="productdiscount">{{ product.discount }}</div>
 			<div class="productitemcount">{{ product.itemcount }} x</div>
 		</a>
+		<a href="#" function="remove-from-shopping-cart" class="productpage-removefromcart removefromcartbutton hured" productid="{{ product.id }}">Verwijder uit winkelmand</a>
 	</div>
 	{% endfor %}
 </div>
-</div>
 {% else %}
-U heeft nog geen artikelen in uw winkelwagentje!
+<div class="Emptybasket">
+	<img id="empty_basket" src="/static/productimages/emptybasket.png">
+	<a>U heeft nog geen artikelen in uw winkelwagentje!</a>
+</div>
 {% endif %}
 {% endblock %}

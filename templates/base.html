@@ -13,6 +13,7 @@
 		<!-- Add CSS files under this heading. -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
 		<link rel="stylesheet" type="text/css" href="/static/stylesheet.css"></style>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	</head>
 	<body>
 		<!-- TODO: add a logical header here that allows the user to navigate, including the shopping cart. -->
@@ -35,14 +36,8 @@
 			<div id="logobackground">
 				<div id="logobar" class="centerstage">
 					<a href="/"><img id="logo" src="/static/voorbeeldshoplogo_small.png" /></a>
-					<div id="logosubbarright" class="logosubbar">
-						&nbsp;
-					</div>
 					<div id="logosubbar" class="logosubbar">
 						<a href="/winkelmand">Winkelmand (<span id="shoppingcartcount">{{ packet.shopping_cart_count }}</span>)</a>
-					</div>
-					<div id="logosubbarleft" class="logosubbar">
-						&nbsp;
 					</div>
 				</div>
 			</div>
@@ -90,8 +85,9 @@
 				{% for product in packet.r_products %}
 					<div class="productpageblock hublueborder">
 						<a href="/productdetail/{{ product.id }}">
+							<img id="placeholder_product" src="/static/productimages/product-placeholder.jpg">
 							<div class="productname">{{ product.name }}</div>
-							<div class="productprice">{{ product.price }}</div>
+							<div class="productprice">{{ product.price }} €</div>
 							<div class="productdiscount">{{ product.discount }}</div>
 						</a>
 						<a href="#" function="add-to-shopping-cart" class="recommended-addtocart button hured" productid="{{ product.id }}">In winkelmand</a>
@@ -101,12 +97,51 @@
 			{% endblock %}
 		</div>
 		{% block footer %}
-		<div id="footer">
-			<div id="bottombarbackground" class="hublue">
-				<div id="bottombar" class="centerstage"></div>
+		<div id="footer" class="hublue">
+			<div class="footer-content">
+
+
+				<div class="footer-1">
+					<a><span id="footer-item-head" class="text">Pagina's</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+
+
+				<div class="footer-2">
+					<a><span id="footer-item-head" class="text">Over Huwebshop</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+				
+
+				<div class="footer-3">
+					<a><span id="footer-item-head" class="text">Klanteservice</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+
+				<div class="footer-4">
+					<a><span id="footer-item-head" class="text">Overige</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+
+				<div class="footer-5">
+					<a><span id="footer-item-head" class="text">Social Media</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">Web Design</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
 			</div>
-			<br/>
-			<div id="credits">&copy; Hogeschool Utrecht, 2019.</div>
+
+			<div id="credits" class="hucredits">
+				Powered by &copy;Group V1A-3
+			</div>
 		</div>
 		{% endblock %}
 	</body> 

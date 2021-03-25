@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ packet.product.name }}</h2>
-<p>{{ packet.product.description|safe }}</p>
-<h3>{{ packet.prepproduct.price }}</h3>
-<a href="#" function="add-to-shopping-cart" class="recommended-addtocart button hured" productid="{{ packet.product._id }}">In winkelmand</a>
+
+<div class="productdetail">
+    <img id="placeholder" src="/static/productimages/product-placeholder.jpg">
+    <div class="productinformation">
+        <h2>{{ packet.product.name }}</h2>
+        <h3>{{ packet.prepproduct.price }} €</h3>
+        <p>{{ packet.product.description|safe }}</p>
+        <a href="#" function="add-to-shopping-cart" class="recommended-addtocart cartaddbutton hured" productid="{{ packet.product._id }}">In winkelmand</a>
+    </div>
+</div>
+
 {% endblock %}

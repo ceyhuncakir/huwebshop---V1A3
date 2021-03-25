@@ -55,6 +55,17 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 
+	$("a[function=remove-from-shopping-cart]").click(function(event){
+		$.ajax({url:"/remove-from-shopping-cart", method:"POST", data: {"product_id": $(this).attr("productid")}}).done(function(data){
+			response = JSON.parse(data);
+			if(response.success){
+				$("#shoppingcartcount").html(response.itemcount);
+			}
+		});
+		event.preventDefault();
+	});
+
+
 	// This function submits the request for changing the displayed number of
 	// items per page.
 

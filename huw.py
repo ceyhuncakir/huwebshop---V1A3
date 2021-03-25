@@ -5,13 +5,13 @@ from dotenv import load_dotenv
 from bson.objectid import ObjectId
 
 # The secret key used for session encryption is randomly generated every time
-# the server is started up. This means all session data (including the 
+# the server is started up. This means all session data (including the
 # shopping cart) is erased between server instances.
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
 
 class HUWebshop(object):
-    """ This class combines all logic behind the HU Example Webshop project. 
+    """ This class combines all logic behind the HU Example Webshop project.
     Note that all rendering is performed within the templates themselves."""
 
     app = None
@@ -19,7 +19,7 @@ class HUWebshop(object):
     database = None
 
     envvals = ["MONGODBUSER","MONGODBPASSWORD","MONGODBSERVER","RECOMADDRESS"]
-    dbstring = 'mongodb+srv://admin:eKvUxY8a1piY4zKd@huwebshop.2pofl.mongodb.net/webshop?retryWrites=true&w=majority'
+    dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majorit'
     recseraddress = "http://127.0.0.1:5001"
 
     categoryindex = None
@@ -29,7 +29,7 @@ class HUWebshop(object):
     mainmenucount = 8
     mainmenuitems = None
 
-    paginationcounts = [8, 16, 32, 0]
+    paginationcounts = [16, 32, 64, 0]
 
     productfields = ["name", "price.selling_price", "properties.discount", "images"]
 
@@ -58,7 +58,7 @@ class HUWebshop(object):
                 self.recseraddress = envdict["RECOMADDRESS"]
         else:
             self.client = MongoClient()
-        self.database = self.client.huwebshop 
+        self.database = self.client.huwebshop
 
         # Once we have a connection to the database, we check to see whether it
         # has a category index prepared; if not, we have a function to make it.
@@ -78,7 +78,7 @@ class HUWebshop(object):
             self.catdecode[enc_cat] = cat
 
         # Since the main menu can't show all the category options at once in a
-        # legible manner, we choose to display a set number with the greatest 
+        # legible manner, we choose to display a set number with the greatest
         # number of associated products.
         countlist = list(map(lambda x, y: (y['_count'], x), self.categoryindex.keys(), self.categoryindex.values()))
         countlist.sort(reverse=True)
@@ -104,11 +104,12 @@ class HUWebshop(object):
         self.app.add_url_rule('/categorieoverzicht/', 'categorieoverzicht', self.categoryoverview)
         self.app.add_url_rule('/change-profile-id', 'profielid', self.changeprofileid, methods=['POST'])
         self.app.add_url_rule('/add-to-shopping-cart', 'toevoegenaanwinkelmand', self.addtoshoppingcart, methods=['POST'])
+        self.app.add_url_rule('/remove-from-shopping-cart', 'verwijderenvanwinkelmand', self.removefromshoppingcart, methods=['POST'])
         self.app.add_url_rule('/producten/pagination-change', 'aantalperpaginaaanpassen', self.changepaginationcount, methods=['POST'])
 
     def createcategoryindex(self):
-        """ Within this function, we compose a nested dictionary of all 
-        categories that occur within the database's products collection, and 
+        """ Within this function, we compose a nested dictionary of all
+        categories that occur within the database's products collection, and
         save it to the categoryindex collection. """
         pcatentries = self.database.products.find({},self.catlevels)
         index = {}
@@ -120,7 +121,7 @@ class HUWebshop(object):
 
     def reccatindex(self,d,e,l,m):
         """ This subfunction of createcategoryindex() sets up the base structure
-        (tree) of the categories and subcategories, leaving leaves as empty 
+        (tree) of the categories and subcategories, leaving leaves as empty
         dicts."""
         if l > m:
             return
@@ -131,7 +132,7 @@ class HUWebshop(object):
             self.reccatindex(d[e[t]],e,l+1,m)
 
     def reccatcount(self,k,v,l,m):
-        """ This subfunction of createcategoryindex() adds the number of 
+        """ This subfunction of createcategoryindex() adds the number of
         documents associated with any (sub)category to its dictionary as the
         _count property. """
         if l > m:
@@ -181,9 +182,9 @@ class HUWebshop(object):
         if r['price'][0:1] == ",":
             r['price'] = "0"+r['price']
         if p['properties']['discount'] is not None:
-            r['discount'] = p['properties']['discount'] 
-        r['smallimage'] = "" # TODO: replace this with actual images!
-        r['bigimage'] = "" # TODO: replace this with actual images!
+            r['discount'] = p['properties']['discount']
+        r['smallimage'] = p['images'][0][0] # TODO: replace this with actual images!
+        r['bigimage'] = p['images'][0][1] # TODO: replace this with actual images!
         r['id'] = p['_id']
         return r
 
@@ -324,11 +325,24 @@ class HUWebshop(object):
         session['shopping_cart'] = session['shopping_cart']
         return '{"success":true, "itemcount":'+str(self.shoppingcartcount())+'}'
 
+    def removefromshoppingcart(self):
+        """ This function adds one object to the shopping cart. """
+        productid = request.form.get('product_id')
+        cartids = list(map(lambda x: x[0], session['shopping_cart']))
+        if productid in cartids:
+            ind = cartids.index(productid)
+            if session['shopping_cart'][ind][1] == 1:
+                session['shopping_cart'].remove((productid, 1))
+            else:
+                session['shopping_cart'][ind] = (session['shopping_cart'][ind][0], session['shopping_cart'][ind][1] - 1)
+        session['shopping_cart'] = session['shopping_cart']
+        return '{"success":true, "itemcount":'+str(self.shoppingcartcount())+'}'
+
     def changepaginationcount(self):
-        """ This function changes the number of items displayed on the product 
+        """ This function changes the number of items displayed on the product
         listing pages. """
         session['items_per_page'] = int(request.form.get('items_per_page'))
-        # TODO: add method that returns the exact URL the user should be 
+        # TODO: add method that returns the exact URL the user should be
         # returned to, including offset
         return '{"success":true, "refurl":"'+request.form.get('refurl')+'"}'
 
