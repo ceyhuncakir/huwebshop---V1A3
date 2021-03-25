@@ -3,7 +3,6 @@ from flask_restful import Api, Resource, reqparse
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
-from main import *
 import random
 
 
