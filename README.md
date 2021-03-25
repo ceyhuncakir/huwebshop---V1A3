@@ -13,8 +13,9 @@ Wytze A. Ketel : student nummer : 1797080 : Email : watze.ketel@student.hu.nl<br
 # Huw.py
 Verander de volgende regels binnen de huw.py bestand
 
+
 ```
-Regel 22 | dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majorit' NAAR dbstring = 'mongodb://admin:admin123@127.0.0.1/EIGEN MONGODB DATABASE?retryWrites=true&w=majorit'
+Regel 22 | dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majorit' NAAR dbstring = 'mongodb://EIGEN MONGODB USERNAME:EIGEN MONGODB PASSWORD@127.0.0.1/EIGEN MONGODB DATABASE?retryWrites=true&w=majorit'
 Regel 61 | self.database = self.client.huwebshop NAAR self.database = self.client.EIGEN MONGODB DATABASE
 ```
 
@@ -23,7 +24,7 @@ Verander de volgende regels binnen de huw_recommend.py bestand
 
 
 ```
-Regel 16 | dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majority' NAAR dbstring = 'mongodb://admin:admin123@127.0.0.1/EIGEN MONGODB DATABASE?retryWrites=true&w=majority'
+Regel 16 | dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majority' NAAR dbstring = 'mongodb://EIGEN MONGODB USERNAME:EIGEN MONGODB PASSWORD@127.0.0.1/EIGEN MONGODB DATABASE?retryWrites=true&w=majority'
 Regel 27 | database = client.huwebshop NAAR database = client.EIGEN MONGODB DATABASE
 ```
 
