@@ -24,8 +24,8 @@ Verander de volgende regels binnen de huw_recommend.py bestand
 
 
 ```
-Regel 16 | dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majority' NAAR dbstring = 'mongodb://EIGEN MONGODB USERNAME:EIGEN MONGODB PASSWORD@127.0.0.1/EIGEN MONGODB DATABASE?retryWrites=true&w=majority'
-Regel 27 | database = client.huwebshop NAAR database = client.EIGEN MONGODB DATABASE
+Regel 15 | dbstring = 'mongodb://admin:admin123@127.0.0.1/huwebshop?retryWrites=true&w=majority' NAAR dbstring = 'mongodb://EIGEN MONGODB USERNAME:EIGEN MONGODB PASSWORD@127.0.0.1/EIGEN MONGODB DATABASE?retryWrites=true&w=majority'
+Regel 26 | database = client.huwebshop NAAR database = client.EIGEN MONGODB DATABASE
 ```
 
 # Versie
