@@ -3,6 +3,7 @@ import random, os, json, urllib.parse, requests
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
+import mysql.connector
 
 # The secret key used for session encryption is randomly generated every time
 # the server is started up. This means all session data (including the
@@ -33,7 +34,7 @@ class HUWebshop(object):
 
     productfields = ["name", "price.selling_price", "properties.discount", "images"]
 
-    recommendationtypes = {'popular':"Anderen kochten ook",'similar':"Soortgelijke producten",'combination':'Combineert goed met','behaviour':'Passend bij uw gedrag','personal':'Persoonlijk aanbevolen'}
+    recommendationtypes = {'voor jou':"Aanbevolen voor jou",'similar':"Mogelijk interesant voor jou",'combination':'Gaat samen goed met','behaviour':'Passend bij uw gedrag','personal':'Persoonlijk aanbevolen'}
 
     """ ..:: Initialization and Category Index Functions ::.. """
 
@@ -105,6 +106,7 @@ class HUWebshop(object):
         self.app.add_url_rule('/change-profile-id', 'profielid', self.changeprofileid, methods=['POST'])
         self.app.add_url_rule('/add-to-shopping-cart', 'toevoegenaanwinkelmand', self.addtoshoppingcart, methods=['POST'])
         self.app.add_url_rule('/remove-from-shopping-cart', 'verwijderenvanwinkelmand', self.removefromshoppingcart, methods=['POST'])
+        self.app.add_url_rule('/get-products-from-keuzevraag', 'keuzevraagproducts', self.keuzevraag, methods=['POST'])
         self.app.add_url_rule('/producten/pagination-change', 'aantalperpaginaaanpassen', self.changepaginationcount, methods=['POST'])
 
     def createcategoryindex(self):
@@ -221,15 +223,16 @@ class HUWebshop(object):
         packet['shopping_cart_count'] = self.shoppingcartcount()
         return render_template(template, packet=packet)
 
+
     """ ..:: Recommendation Functions ::.. """
 
-    def recommendations(self, count):
+    def recommendations(self, count, direction):
         """ This function returns the recommendations from the provided page
         and context, by sending a request to the designated recommendation
         service. At the moment, it only transmits the profile ID and the number
         of expected recommendations; to have more user information in the REST
         request, this function would have to change."""
-        resp = requests.get(self.recseraddress+"/"+session['profile_id']+"/"+str(count))
+        resp = requests.get(self.recseraddress+"/"+session['profile_id']+"/"+direction+"/"+str(count))
         if resp.status_code == 200:
             recs = eval(resp.content.decode())
             queryfilter = {"_id": {"$in": recs}}
@@ -267,7 +270,7 @@ class HUWebshop(object):
             'pend': skipindex + session['items_per_page'] if session['items_per_page'] > 0 else prodcount, \
             'prevpage': pagepath+str(page-1) if (page > 1) else False, \
             'nextpage': pagepath+str(page+1) if (session['items_per_page']*page < prodcount) else False, \
-            'r_products':self.recommendations(4), \
+            'r_products':self.recommendations(4, "1"), \
             'r_type':list(self.recommendationtypes.keys())[0],\
             'r_string':list(self.recommendationtypes.values())[0]\
             })
@@ -278,7 +281,7 @@ class HUWebshop(object):
         product = self.database.products.find_one({"_id":str(productid)})
         return self.renderpackettemplate('productdetail.html', {'product':product,\
             'prepproduct':self.prepproduct(product),\
-            'r_products':self.recommendations(4), \
+            'r_products':self.recommendations(4, "3"), \
             'r_type':list(self.recommendationtypes.keys())[1],\
             'r_string':list(self.recommendationtypes.values())[1]})
 
@@ -290,7 +293,7 @@ class HUWebshop(object):
             product["itemcount"] = tup[1]
             i.append(product)
         return self.renderpackettemplate('shoppingcart.html',{'itemsincart':i,\
-            'r_products':self.recommendations(4), \
+            'r_products':self.recommendations(4, "2"), \
             'r_type':list(self.recommendationtypes.keys())[2],\
             'r_string':list(self.recommendationtypes.values())[2]})
 
@@ -337,6 +340,32 @@ class HUWebshop(object):
                 session['shopping_cart'][ind] = (session['shopping_cart'][ind][0], session['shopping_cart'][ind][1] - 1)
         session['shopping_cart'] = session['shopping_cart']
         return '{"success":true, "itemcount":'+str(self.shoppingcartcount())+'}'
+
+    def keuzevraag(self):
+        list = []
+
+        optie1 = request.form.get('optie_1')
+        optie2 = request.form.get('optie_2')
+        optie3 = request.form.get('optie_3')
+
+        db = mysql.connector.connect(host="localhost", user="root", password="", database="test")
+        cursor = db.cursor()
+
+        cursor.execute("SELECT * FROM `keuzehulp` WHERE 1")
+        keuzehulp_combi = cursor.fetchall()
+
+        for i in keuzehulp_combi:
+            list.append([i[0], i[1], i[2], i[3]])
+
+        for i in range(len(list)):
+            if optie1 == list[i][1] and optie2 == list[i][2] and optie3 == list[i][3]:
+                print("match gevonden")
+                return '{"success":true, "refurl": "http://localhost:5000/productdetail/' + list[i][0] + '"}'
+            else:
+                print("match niet gevonden")
+
+        #return '{"success":true, "refurl": "http://localhost:5000/productdetail/' + i[0] + '"}'
+        #return '{"success":true, "refurl": "http://localhost:5000/productdetail/' + product + '"}'
 
     def changepaginationcount(self):
         """ This function changes the number of items displayed on the product

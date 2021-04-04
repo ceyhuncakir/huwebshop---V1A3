@@ -1,0 +1,135 @@
+<!doctype html>
+<!-- This file is meant to contain the base wrapper that applies for all content, such as the header, footer, css and js resources. -->
+<html>
+	<head>
+		<!-- TODO: get a favicon to setup. -->
+		<!-- TODO: make the title dynamic and appropriate. -->
+		<title>HU Webshop Project</title>
+		<!-- TODO: add dynamic meta tags for each page. -->
+		<link rel="shortcut icon" type="image/png" href="/static/favicon.png">
+		<!-- Add Javascript libraries under this heading. -->
+		<script src="/static/jquery-3.4.1.min.js"></script>
+		<script src="/static/dynamic-elements.js"></script>
+		<!-- Add CSS files under this heading. -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+		<link rel="stylesheet" type="text/css" href="/static/stylesheet.css"></style>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	</head>
+	<body>
+		<!-- TODO: add a logical header here that allows the user to navigate, including the shopping cart. -->
+		{% block header %}
+		<div id="header">
+			{% block sessionbar %}
+			<div id="sessionbarbackground" class="hublue">
+				<div id="profilebar-static" class="centerstage textright textwhiteshadow">
+					Profiel-ID: {{ packet.profile_id }} <a function="show-profilebar-dynamic" href="#">(Aanpassen)</a>
+				</div>
+				<div id="profilebar-dynamic" class="centerstage textright textwhiteshadow" style="display:none;">
+					Profiel-ID: <input id="profile-id-input" type="text" value="{{ packet.profile_id }}" size="30" />&nbsp;&nbsp;<a href="#" function="change-profile-id" class="hured small button"/>Aanpassen</a>&nbsp;&nbsp;<a function="show-profilebar-static" href="#">(X)</a>
+				</div>
+				<div id="profilebar-error" class="centerstage textright textwhiteshadow" style="display:none;">
+					Fout: geen geldig profiel-ID opgegeven. Voer de hexadecimale string in behorend bij het _id van het gewenste profiel.
+				</div>
+			</div>
+			{% endblock %}
+			{% block logobar %}
+			<div id="logobackground">
+				<div id="logobar" class="centerstage">
+					<a href="/"><img id="logo" src="/static/voorbeeldshoplogo_small.png" /></a>
+					<div id="logosubbar" class="logosubbar">
+						<a href="/winkelmand">Winkelmand (<span id="shoppingcartcount">{{ packet.shopping_cart_count }}</span>)</a>
+					</div>
+				</div>
+			</div>
+			{% endblock %}
+			{% block menu %}
+			<span id="menuwrapper">
+				<div id="menubarbackground" class="hublueborderbottom">
+					<div id="menubar" class="centerstage">
+						{% for k in packet.mainmenulist %}
+						<div class="menuitem" dropdown="menudropdown-{{ packet.categories_encode[k] }}">
+							<a href="/producten/{{ packet.categories_encode[k] }}">{{ k }}</a>
+						</div>
+						{% endfor %}
+						<div class="menuitem">
+							<a href="/categorieoverzicht">&gt;</a>
+						</div>
+					</div>
+				</div>
+				<div id="menudropdownbackground">
+					{% for k, v in packet.categoryindex.items() %}
+					{% if v|length %}
+					<div class="menudropdown hublueborderbottom" id="menudropdown-{{ packet.categories_encode[k] }}">
+						{% for k2, v2 in v.items() %}
+						{% if k2[0:1] != "_" %}
+						<a href="/producten/{{ packet.categories_encode[k] }}/{{ packet.categories_encode[k2] }}" class="submenuitem">{{ k2 }}</a>
+						{% endif %}
+						{% endfor %}
+					</div>
+					{% endif %}
+					{% endfor %}
+				</div>
+			</span>
+			{% endblock %}
+		</div>
+		{% endblock %}
+
+		<!-- TODO: extend this content block in subsequent templates. -->
+		<div id="content" class="centerstage">
+			{% block content %}{{ contenttext }}{% endblock %}
+			{% block suggestionbox %}
+			{% if packet.r_products %}
+			<h4>{{ packet.r_string }}</h4>
+			{% endif %}
+			{% endblock %}
+		</div>
+		{% block footer %}
+		<div id="footer" class="hublue">
+			<div class="footer-content">
+
+
+				<div class="footer-1">
+					<a><span id="footer-item-head" class="text">Pagina's</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+
+
+				<div class="footer-2">
+					<a><span id="footer-item-head" class="text">Over Huwebshop</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+
+
+				<div class="footer-3">
+					<a><span id="footer-item-head" class="text">Klanteservice</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+
+				<div class="footer-4">
+					<a><span id="footer-item-head" class="text">Overige</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+
+				<div class="footer-5">
+					<a><span id="footer-item-head" class="text">Social Media</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+					<a href=""><span class="text">Web Design</span></a>
+					<a href=""><span class="text">lorem ipsum</span></a>
+				</div>
+			</div>
+
+			<div id="credits" class="hucredits">
+				Powered by &copy;Group V1A-3
+			</div>
+		</div>
+		{% endblock %}
+	</body>
+</html>
