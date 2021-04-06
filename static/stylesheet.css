@@ -44,163 +44,6 @@ body, a:link, a:visited, a:hover, a:active {
 	text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
 }
 
-.panel {
-  position: relative;
-  top: 20px;
-  margin-bottom: 80px;
-  margin-top: 50px;
-  left: 750px;
-  overflow: hidden;
-  width: 400px;
-  height: 250px;
-  background: #FFFFFF;
-  box-shadow: 5px 5px 15px rgba(255,255,255,0);
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
-}
-
-.panel h1 {
-	position: relative;
-	top: 70px;
-}
-
-.panel #open-popup-btn {
-  padding:10px 5em;
-  border-radius: 12px;
-  border:0.16em solid rgba(255,255,255,0);
-  text-decoration:none;
-  font-family:'Roboto',sans-serif;
-  font-weight:300;
-  color:#FFFFFF;
-  text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
-  text-align:center;
-  top: 110px;
-  width: 250px;
-  height: 50px;
-  right: 0px;
-  position: relative;
-}
-
-.popup {
-  position: absolute;
-  left: 950px;
-  width:500px;
-  height:350px;
-  padding:30px 20px;
-  background:#f5f5f5;
-  border-radius:10px;
-  box-sizing:border-box;
-  z-index:2;
-  text-align:center;
-  opacity:0;
-  top:300px;
-  transform:translate(-50%,-50%) scale(0.5);
-  transition: opacity 300ms ease-in-out,
-              top 1000ms ease-in-out,
-              transform 1000ms ease-in-out;
-}
-
-.popup .form_0 {
-	position: relative;
-	top: 0px;
-}
-
-.popup .form_1 {
-	position: relative;
-	top: 35px;
-}
-
-.popup .form_2 {
-	position: relative;
-	top: 70px;
-}
-
-
-
-.popup.active {
-  opacity:1;
-  top:50%;
-  transform:translate(-50%,-50%) scale(1);
-  transition: transform 300ms cubic-bezier(0.18,0.89,0.43,1.19);
-}
-
-.popup .icon {
-  margin:5px 0px;
-  width:50px;
-  height:50px;
-  border:2px solid #34f234;
-  text-align:center;
-  display:inline-block;
-  border-radius:50%;
-  line-height:60px;
-}
-.popup .icon i.fa {
-  font-size:30px;
-  color:#34f234;
-}
-.popup .title {
-  margin:5px 0px;
-  font-size:30px;
-  font-weight:600;
-}
-.popup .description {
-  color:#222;
-  font-size:15px;
-  padding:5px;
-}
-.popup .dismiss-btn {
-  margin-top:15px;
-}
-
-.popup #keuzevraag-resultaat  {
-	border-radius: 12px;
-	padding:10px 8em;
-	color: white;
-	position: relative;
-	top: 130px;
-}
-
-.popup .dismiss-btn button {
-  position: relative;
-  left: 215px;
-  bottom: 30px;
-  padding:5px 10px;
-  background:#111;
-  color:#f5f5f5;
-  border:2px solid #111;
-  font-size:16px;
-  font-weight:600;
-  outline:none;
-  border-radius:10px;
-  cursor:pointer;
-  transition: all 300ms ease-in-out;
-}
-.popup .dismiss-btn button:hover {
-  color:#111;
-  background:#f5f5f5;
-}
-.popup > div {
-  position:relative;
-  top:10px;
-  opacity:0;
-}
-.popup.active > div {
-  top:0px;
-  opacity:1;
-}
-.popup.active .icon {
-  transition: all 300ms ease-in-out 250ms;
-}
-.popup.active .title {
-  transition: all 300ms ease-in-out 300ms;
-}
-.popup.active .description {
-  transition: all 300ms ease-in-out 350ms;
-}
-.popup.active .dismiss-btn {
-  transition: all 300ms ease-in-out 400ms;
-}
-
 a.button{
 	padding:1px 3.7em;
 	border:0.16em solid rgba(255,255,255,0);
@@ -253,7 +96,7 @@ a.removefromcartbutton {
 	height: 200px;
 	position: absolute;
 	border-radius: 12px;
-
+	
 }
 
 #empty_basket {
@@ -294,7 +137,7 @@ a.removefromcartbutton {
 	position: relative;
 	border-radius: 12px;
 	line-height: 40px;
-	white-space: normal;
+	white-space: normal; 
 }
 
 
@@ -401,11 +244,11 @@ a.button.small{
 }
 
 .menudropdown {
-	position: absolute;
+	position: absolute; 
 	display: none;
 	width:100%;
-	background-color: #fafafa;
-	z-index: 2;
+	background-color: #fafafa; 
+	z-index: 2; 
 	padding-top:7px;
 	padding-bottom:10px;
 }
@@ -431,9 +274,9 @@ a.button.small{
 	border-radius:16px;
 	overflow:hidden;
 	box-shadow: 0 3px 3px #777;
-	filter: none;
-	-webkit-filter: blur(0);
-	-moz-filter: blur(0);
+	filter: none; 
+	-webkit-filter: blur(0); 
+	-moz-filter: blur(0); 
 	-ms-filter: blur(0);
 	filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
 	transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
@@ -603,3 +446,5 @@ a.button.small{
 	color: white;
 	font-size: 16px;
 }
+
+

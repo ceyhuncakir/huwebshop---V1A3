@@ -3,7 +3,8 @@ from flask_restful import Api, Resource, reqparse
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
-import mysql.connector
+import random
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -28,107 +29,53 @@ class Recom(Resource):
     """ This class represents the REST API that provides the recommendations for
     the webshop. At the moment, the API simply returns a random set of products
     to recommend."""
-    #  shopping_card,
-    def get(self, profileid, direction, count):
 
-        # gender recommendation
-        if direction == 1:
-            prodids = self.get_gender(profileid)
-            return prodids, 200
-        elif direction == 2:
-            prodids = self.get_main(profileid)
-            return prodids, 200
-        elif direction == 3:
-            prodids = self.get_sub(profileid)
-            return prodids, 200
+    # def fetch_content_prods(self, profileid):
+    #     prodlist = []
 
-        # random recommendation voor basket
-            #randcursor = database.products.aggregate([{ '$sample': { 'size': count } }])
-            #prodids = list(map(lambda x: x['_id'], list(randcursor)))
-            #return prodids, 200
+    #     db, cursor = mysql_connector("root", "", "test")
+    #     cursor.execute("SELECT `product_1`, `product_2`, `product_3`, `product_4` FROM `content_filtering` WHERE `id` = '%s'" % profileid)
+    #     profiles = cursor.fetchall()
 
-    def get_gender(self, current_id):
-        """
-        Loop through the recommendation tables and find the corresponding profile id. The tables are sorted from content
-        to collaborative filters. if the profile is not in the content filter it will look through the collaborative filers
-        """
-        # Create sql connection
-        db = mysql.connector.connect(host="localhost", user="root", password="", database="test")
-        cursor = db.cursor()
-        # Varible list with all the table's
-        content = ["gender_recommendation"]
-        response = []
-        # for each item in content try
-        for item in content:
-            current_id_quotes = "'" + str(current_id) + "'"
-            response = self.get_products(cursor, item, current_id_quotes)
-            if response:
-                break
-        cursor.close()
-        db.commit()
-        db.close()
-        return list(response[0])
+    #     for i in profiles:
+    #         for m in i:
+    #             prodlist.append(m)
 
-    def get_main(self, current_id):
-        """
-        Loop through the recommendation tables and find the corresponding profile id. The tables are sorted from content
-        to collaborative filters. if the profile is not in the content filter it will look through the collaborative filers
-        """
-        # Create sql connection
-        db = mysql.connector.connect(host="localhost", user="root", password="", database="test")
-        cursor = db.cursor()
-        # Varible list with all the table's
-        content = ["main_category_recommendation"]
-        response = []
-        # for each item in content try
-        for item in content:
-            current_id_quotes = "'" + str(current_id) + "'"
-            response = self.get_products(cursor, item, current_id_quotes)
-            if response:
-                break
-        cursor.close()
-        db.commit()
-        db.close()
-        return list(response[0])
+    #     sql_closer(db, cursor)
 
-    def get_sub(self, current_id):
-        """
-        Loop through the recommendation tables and find the corresponding profile id. The tables are sorted from content
-        to collaborative filters. if the profile is not in the content filter it will look through the collaborative filers
-        """
-        # Create sql connection
-        db = mysql.connector.connect(host="localhost", user="root", password="", database="test")
-        cursor = db.cursor()
-        # Varible list with all the table's
-        content = ["sub_category_recommendation"]
-        response = []
-        # for each item in content try
-        for item in content:
-            current_id_quotes = "'" + str(current_id) + "'"
-            response = self.get_products(cursor, item, current_id_quotes)
-            if response:
-                break
-        cursor.close()
-        db.commit()
-        db.close()
-        return list(response[0])
+    #     return prodlist
 
+    # def fetch_collaborative_prods(self, profileid):
+    #     prodlist = []
 
-    def get_products(self, cursor, content, current_id):
-        """
-        For the given table and profile id retrieve the products. if there is no corresponding id return a empty list
-        """
-        # Try mysql querry
-        try:
-            query = "SELECT product_one, product_two, product_three, product_four FROM %s WHERE id = %s" % (
-            content, current_id)
-            cursor.execute(query)
-            data = cursor.fetchall()
-        except:
-            data = []
-        return data
+    #     db, cursor = mysql_connector("root", "", "test")
+    #     cursor.execute("SELECT `product_1`, `product_2`, `product_3`, `product_4` FROM `collaborative_filtering` WHERE `id` = '%s'" % profileid)
+    #     profiles = cursor.fetchall()
+
+    #     for i in profiles:
+    #         for m in i:
+    #             prodlist.append(m)
+
+    #     sql_closer(db, cursor)
+
+    #     return prodlist
+
+    def get(self, profileid, count):
+
+        #prodids_collab = self.fetch_collaborative_prods(profileid)
+        #prodids_content = self.fetch_content_prods(profileid)
+
+        """ This function represents the handler for GET requests coming in
+        through the API. It currently returns a random sample of products. """
+        randcursor = database.products.aggregate([{ '$sample': { 'size': count } }])
+        prodids = list(map(lambda x: x['_id'], list(randcursor)))
+
+        # if profileid == "5a3e2f8ba82561000176c70a":
+        #     return prodids_content, 200
+        # else:
+        return prodids, 200
 
 
 # This method binds the Recom class to the REST API, to parse specifically
 # requests in the format described below.
-api.add_resource(Recom, "/<string:profileid>/<int:direction>/<int:count>")
+api.add_resource(Recom, "/<string:profileid>/<int:count>")
