@@ -13,3 +13,14 @@ def mysqlConnectie(loginInfo):
     cursor = db.cursor()
 
     return db, cursor
+
+
+def sql_closer(db, cursor):
+    """
+    Sluit de cursor en commit de veranderingen van de database daarna sluit de database.
+    :param cursor:, :param db:
+    """
+
+    cursor.close()
+    db.commit()
+    db.close()
