@@ -24,3 +24,19 @@ def sql_closer(db, cursor):
     cursor.close()
     db.commit()
     db.close()
+
+
+def create_rule_table(cursor, table_name, column, direction):
+    """
+    Create table with name variable "table_name" for to hold the recommendations.
+    :param cursor:
+    :param table_name:
+    """
+    # Create a table if it not already exists
+    if direction == 1:
+        query = "CREATE TABLE IF NOT EXISTS %s (id VARCHAR(255) PRIMARY KEY UNIQUE, product_1 VARCHAR(255)" \
+               ", product_2 VARCHAR(255), product_3 VARCHAR(255), product_4 VARCHAR(255))""" % table_name
+    elif direction == 2:
+        query = "CREATE TABLE IF NOT EXISTS %s (id VARCHAR(255) PRIMARY KEY UNIQUE, %s VARCHAR(255))" % (table_name, column)
+
+    cursor.execute(query)
