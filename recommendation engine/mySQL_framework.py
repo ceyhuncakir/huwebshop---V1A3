@@ -63,3 +63,23 @@ def retrieve_order_profiles(cursor):
     profiles_orders = cursor.fetchall()
 
     return profiles_orders
+
+
+def insert_values(direction, profile, list_value, db, cursor, table, *column):
+    """
+    Connect aan de database en loop door de verschillende waardes in de list en voeg ze die dan toe aan de table collums.
+    Execute deze command en commit het naar de sql database.
+    :param direction:, :param profile, :param list_value:, :param db:, :param cursor:, :param table:, :param *column:, :return:,
+    """
+
+    if direction == 0:
+        category_list_sql = "INSERT IGNORE INTO " + table + " (" + column[0] + ", " + column[1] + ", " + column[2] + ", " + column[3] + ", " + column[4] +") VALUES (%s, %s, %s, %s, %s)"
+        category_list_sql_value = (str(profile), str(list_value[0]), str(list_value[1]), str(list_value[2]), str(list_value[3]))
+        cursor.execute(category_list_sql, category_list_sql_value)
+
+    elif direction == 1:
+        category_list_sql = "INSERT IGNORE INTO " + table + " (" + column[0] + ", " + column[1] + ") VALUES (%s, %s)"
+        category_list_sql_value = (str(profile), str(list_value[0]))
+        cursor.execute(category_list_sql, category_list_sql_value)
+
+    db.commit()
