@@ -118,3 +118,38 @@ def retrieve_correct(data):
             # append item in product_list
             product_list.append(product)
     return product_list
+
+
+def recommendation_profile_orders_process(login_dict):
+    """
+    Rule: People similar to you bought.
+    This process creates 4 recommendations based on the orders. For each profile with orders return all
+    products. For each product in profiles retrieve all sessions with similar products and determine the frequency
+    and add a value for each product to determine highest recommended. Return 4 random product items of the 10 most
+    common product.
+    :param login_dict: Username and passwoord
+    :return: Start and End time.
+    """
+    # Create connection with to mysql database.  # localhost
+    db, cursor = mysqlConnectie(login_dict)
+    start = time.time()
+
+    delete_table(cursor, "recommendation_profile_orders")
+    create_rule_table(cursor, "recommendation_profile_orders", "", 1)
+
+    # Retrieve all profiles that have orders.
+    profiles_orders = retrieve_order_profiles(cursor)
+    # Retrieve all products id's for each profile.
+    profile_products_list = retrieve_order_products(cursor, profiles_orders)
+    # Retrieve a list of profiles with four items.
+    products = product_profile(cursor, profile_products_list)
+
+    # Insert all data into table
+    for profile_products in products:
+        insert_values(0, profile_products[0], profile_products[1], db, cursor, "recommendation_profile_orders", "id", "product_1",
+                      "product_2", "product_3", "product_4")
+
+    # Commit and close database connection
+    sql_closer(db, cursor)
+    end = time.time()
+    return start, end
