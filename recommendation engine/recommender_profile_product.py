@@ -69,3 +69,35 @@ def retrieve_similar_profile_products(cursor, product):
         # add the list to profile_products_list
         profile_products_list += list(profile_items)
     return profile_products_list
+
+
+def product_profile(cursor, profile_products_list):
+    """
+    For each profile return random sample of 4 of the most frequency bought items. if there are more than 2 products
+    skip the product (Beter recomondations can be made). for each product retrieve all orders with that product.
+    determine the frequency of ever product. Sort the list on the highest frequency and return 4 items out of the 10
+    most bought items.
+    :param cursor: sql cursor
+    :param profile_products_list: profile with all the products
+    :return: return a list of 4 products with profile id
+    """
+    profile_recomondation = []
+    # for each profile
+    for profile in profile_products_list:
+        recomondation_product = {}
+        # if profile contaions more than 2 products skip the profile
+        if len(profile[1]) >= 2:
+            continue
+        # for each product in profile
+        for product in profile[1]:
+            # Retrieve similar profile items.
+            similar_profile_products = retrieve_similar_profile_products(cursor, product)
+            # Reduce duplicates
+            recomondation_product = frequency_category(profile[1], recomondation_product, similar_profile_products, 0.01)
+        # Sort the dictionary and return the first 4 items
+        products = sorted(recomondation_product, key=recomondation_product.get, reverse=True)[:10]
+        # if length of recommended products is lower than 4 skip profile
+        if len(products) < 4:
+            continue
+        profile_recomondation.append([profile[0], random.sample(products, 4)])
+    return profile_recomondation
