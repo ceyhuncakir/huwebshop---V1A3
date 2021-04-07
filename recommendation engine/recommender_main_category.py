@@ -79,3 +79,21 @@ def tabelInformatie(tabel, cursor):
     return ophaal
 
 
+def data_ophalen_uit_database(cursor, profiel_id):
+    """
+    Haal alle producten op uit de database die het profiel heeft georderd.
+    :param cursor: sql cursor
+    :param profiel_id: het huidige profiel
+    :return: lijst aan main category's
+    """
+    # list profiel main catagory
+    profiel_cat = []
+    # Haal alle producten met het huidige profiel op uit de table products relaatie orders.
+    cursor.execute("SELECT products.id,products.price,products.stock,main_category.id,orders.aantal,brand.brand,gender.id,orders.sessions_id_key,doelgroep.id,sessions.profiles_id_key FROM `products`,`brand`,`gender`,`orders`,`main_category`,`sessions`,`doelgroep` WHERE products.gender_id_key = gender.id AND products.main_category_id_key = main_category.id AND products.brand_id_key = brand.id AND orders.products_id_key = products.id AND products.doelgroep_id_key = doelgroep.id AND orders.sessions_id_key = sessions.id AND profiles_id_key = '%s'" % profiel_id)
+    profiel_data = cursor.fetchall()
+    # Voor elke product in de tuple voeg de main category toe aan de lijst
+    for item in profiel_data:
+        profiel_cat.append(item[3])
+
+    return profiel_cat
+
