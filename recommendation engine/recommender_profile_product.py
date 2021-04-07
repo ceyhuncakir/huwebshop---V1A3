@@ -21,3 +21,23 @@ def retrieve_order_products(cursor, profile_list):
         profile_product_list.append([item[0], retrieve_correct(data)])
 
     return profile_product_list
+
+
+def frequency_category(product, freq_dict, product_category, num):
+    """
+    Determine the frequency of every product in a list and add them to a dictionary
+    :param product: original list of products
+    :param freq_dict: frequency dictionary
+    :param product_category: Products need to be counted
+    :param num: counter or weight
+    :return:
+    """
+    # for item in product_category
+    for item in product_category:
+        # if the item is already in products
+        if item[0] not in freq_dict and item[0] not in product:
+            # add item in dict and add given value
+            freq_dict[item[0]] = num
+        elif item[0] in freq_dict and item[0] not in product:
+            freq_dict[item[0]] += num
+    return freq_dict
