@@ -68,3 +68,42 @@ def get_gender_recommendation(cursor, profileid):
 
     #print(colored("\n\t" + "content filtering Done", "green"), colored("\t" + "profiel:" + profileid, "yellow"))
     return profileid, random.sample(sim_prod, 4), products
+
+def recommendation_gender(login_dict):
+    """
+    functie voor de process van de recommendation engine gender
+    :param mysql_username
+    :param mysql_password
+    :param mysql_database
+    :return
+    """
+
+    #mysql db connectie
+    db, cursor = mysqlConnectie(login_dict)
+
+    #verwijderingen van de tabellen.
+    delete_table(cursor, "gender_recommendation")
+    delete_table(cursor, "gender_profiles")
+
+    #creeren van de tabellen.
+    create_rule_table(cursor, "gender_recommendation", "", 1)
+    create_rule_table(cursor, "gender_profiles", "gender", 2)
+
+    #order van de profielen worden gepakt
+    profiles = retrieve_order_profiles(cursor)
+
+    start = time.time()
+
+    for i in profiles:
+        #try and except word gebruikt voor de profielen die geen gender krijgen
+        try:
+            profile_content, recommendation_content, gender = get_gender_recommendation(cursor, i[0])
+            insert_values(0, profile_content, recommendation_content, db, cursor, "gender_recommendation", "id",
+                          "product_1", "product_2", "product_3", "product_4")
+            insert_values(1, profile_content, gender, db, cursor, "gender_profiles", "id", "gender")
+        except TypeError:
+            continue
+
+    end = time.time()
+    sql_closer(db, cursor)
+    return end, start
