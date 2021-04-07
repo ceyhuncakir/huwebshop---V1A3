@@ -41,3 +41,31 @@ def frequency_category(product, freq_dict, product_category, num):
         elif item[0] in freq_dict and item[0] not in product:
             freq_dict[item[0]] += num
     return freq_dict
+
+
+def retrieve_similar_profile_products(cursor, product):
+    """
+    Retrieve for each product all sessions that bought the same item. for each session return all items bought.
+    :param cursor: sql cursor
+    :param product: current product
+    :return: list of all similar products to the profile
+    """
+    # Create a new_string for query ' are needed.
+    new_item = "'" + str(product) + "'"
+    # Retrieve all sessions with the same item bought
+    cursor.execute("SELECT orders.sessions_id_key FROM orders WHERE orders.products_id_key = %s" % new_item)
+    profiles = cursor.fetchall()
+
+
+    profile_products_list = []
+    # for each profile
+    for item in profiles:
+        # Create a new_string for query ' are needed.
+        new_item = "'" + str(item[0]) + "'"
+        # for each sessions return all items bought
+
+        cursor.execute("SELECT orders.products_id_key FROM orders WHERE orders.sessions_id_key = %s" % new_item)
+        profile_items = cursor.fetchall()
+        # add the list to profile_products_list
+        profile_products_list += list(profile_items)
+    return profile_products_list
