@@ -101,3 +101,20 @@ def product_profile(cursor, profile_products_list):
             continue
         profile_recomondation.append([profile[0], random.sample(products, 4)])
     return profile_recomondation
+
+
+def retrieve_correct(data):
+    """
+    Return de all products from different sessions in one list
+    :param data:
+    :return: list
+    """
+    # Create a list
+    product_list = []
+    # Loop trough a list of lists.
+    for products in data:
+        # loop trough all items
+        for product in products:
+            # append item in product_list
+            product_list.append(product)
+    return product_list
