@@ -38,3 +38,29 @@ def main_category_rec(cursor, profiel_id):
 
     return profiel_id, random.sample(prod, 4)
 
+def meest_voorkomend(cursor, profiel_id):
+    """
+    Bepaal de meest voor komende main category en tell die bij elkaar op. return de meest voorkomende main category
+    :param cursor: sql cursor
+    :param profiel_id:
+    :return:
+    """
+
+    counter = 0
+    # Haal alle producten van het profiel uit de database
+    data = data_ophalen_uit_database(cursor, profiel_id)
+    num = data[0]
+
+    # Bepaal de meest voorkomende main catagory
+    for i in data:
+        # Count de aantal keer de main category er in voorkomt
+        curr_frequency = data.count(i)
+        if (curr_frequency > counter):
+            counter = curr_frequency
+            num = i
+    # Als Num 0 is return 0 en sla profiel over
+    if num == None:
+        return 0
+    else:
+        return num
+
