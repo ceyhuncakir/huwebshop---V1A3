@@ -97,3 +97,31 @@ def data_ophalen_uit_database(cursor, profiel_id):
 
     return profiel_cat
 
+def recommendation_main_category(login_dict):
+    """
+    Process voor het maken van de recomondation. het process maakt eerst een conectie met de database.
+    Als de huidige table all bestaat word die verwijdert daarna wordt die weer aan gemaakt. haal alle profielen met orders
+    uit de databse en voor ieder profiel bepaal de main category die daar bij hoort. Bepaal de meest voorkomende producten van de
+    main category en insert 4 producten random van de 10 meest populairen producten
+    :param login_dict: wachtwoord en username
+    :return: Start en stop tijd.
+    """
+    # Maak connectie met my sql
+    db, cursor = mysqlConnectie(login_dict)
+    start = time.time()
+    # Delete en maak de table main category
+    delete_table(cursor, "main_category_rec")
+    create_rule_table(cursor, "main_category_rec", "", 1)
+    # Haal alle profielen met orders uit de database
+    profielen = retrieve_order_profiles(cursor)
+
+    # voor elke profiel
+    for i in profielen:
+        # Bepaal de main category die bij het profiel.
+        profiel_id, vergelijking = main_category_rec(cursor, i[0])
+        # insert alle recomondation producten weer in de database.
+        insert_values(0, profiel_id, vergelijking, db, cursor, "main_category_rec", "id", "product_1", "product_2", "product_3", "product_4" )
+
+    sql_closer(db, cursor)
+    end = time.time()
+    return start, end
