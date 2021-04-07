@@ -64,3 +64,18 @@ def meest_voorkomend(cursor, profiel_id):
     else:
         return num
 
+
+def tabelInformatie(tabel, cursor):
+    """
+    Haal alle data uit table met huidige table naam
+    :param tabel:
+    :param cursor: sql cursor
+    :return:
+    """
+    # Haal alle data van table varibale op
+    cursor.execute("SELECT * FROM " + tabel)
+    ophaal = cursor.fetchall()
+
+    return ophaal
+
+
