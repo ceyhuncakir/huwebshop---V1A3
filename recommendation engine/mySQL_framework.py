@@ -40,3 +40,26 @@ def create_rule_table(cursor, table_name, column, direction):
         query = "CREATE TABLE IF NOT EXISTS %s (id VARCHAR(255) PRIMARY KEY UNIQUE, %s VARCHAR(255))" % (table_name, column)
 
     cursor.execute(query)
+
+
+def delete_table(cursor, table_name):
+    """
+    Delete table with variable "table_name".
+    :param cursor:
+    :param table_name:
+    """
+    # Drop the table if it exists.
+    query = "DROP TABLE IF EXISTS %s" % table_name
+    cursor.execute(query)
+
+
+def retrieve_order_profiles(cursor):
+    """
+    Return all profiles with orders.
+    :param cursor:
+    :return:
+    """
+    cursor.execute("SELECT DISTINCT sessions.profiles_id_key FROM orders, sessions WHERE sessions.id = orders.sessions_id_key")
+    profiles_orders = cursor.fetchall()
+
+    return profiles_orders
