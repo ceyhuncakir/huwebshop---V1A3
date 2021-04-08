@@ -56,3 +56,47 @@ def table_remove_options():
     2: Verwijder geselecteerde table\n
     @============================================================================================@\n
     ''', colors[randrange(3)]))
+
+
+# Voornamelijk gemaakt door: Ceyhun Cakir, Studentnummer: 1784480, Kenny van den Berg, Studentnummer: 1777503
+def menu():
+    """
+    Roep de banner en het optie menu op. Als optie input 1 is start function create_tables_process.
+    Als optie input 2 is word de functie  transfer_data_process  op geroepen.
+    Als optie input 3 is word de functie  delete_database op geroepen.
+    Als optie input 4 is word de lijst aan errors getoont.
+    Als optie input 5 stopt het program
+    :return:
+    """
+
+    banner()
+    options = ["1", "2", "3", "4", "5"]
+    error_list = []
+
+    while True:
+        try:
+            opties()
+            optie = ""
+            while optie not in options:
+                optie = input(colored("\n\tKies je optie: > ", "yellow"))
+                if optie not in options:
+                    print(colored("\n\tdie optie bestaat niet", "red"))
+                    time.sleep(1)
+            if optie == "1":
+                create_tables_process()
+            elif optie == "2":
+                transfer_data_process()
+            elif optie == "3":
+                delete_database_process()
+            elif optie == "4":
+                if len(error_list) != 0:
+                    for item in error_list:
+                        print(item)
+                time.sleep(3)
+            elif optie == "5":
+                print(colored("\n\tThank you and goodbye", "red"))
+                time.sleep(1)
+                return
+            optie = 0
+        except mysql.connector.Error as e:
+            error_list.append(e)
