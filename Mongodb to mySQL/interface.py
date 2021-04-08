@@ -109,3 +109,18 @@ def give_user_password():
     user = input(colored("\n\tGeef je mySQL username op: > ", "yellow"))
     passwd = input(colored("\n\tGeef je mySQL password op: > ", "yellow"))
     return user, passwd
+
+# Voornamelijk gemaakt door: Wytze A. Ketel, Studentnummer: 1797080
+def create_tables_process():
+    """
+     start het create database process. vraag je om een user, password & database input, roep daarna mysql_connector() op om je aan te melden.
+    make_mysql_table_process word opgeroepen uiteindelijk na aanmelding
+     """
+    user, passwd = give_user_password()
+    database = input(colored("\n\tGeef je mySQL database op: > ", "yellow"))
+
+    db, cursor = mysql_connector(user, passwd, database)
+    create_predefined_tables(cursor, database)
+
+    print(colored("\n\tTables zijn aangemaakt", "yellow"))
+    sql_closer(db, cursor)
