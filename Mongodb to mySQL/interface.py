@@ -124,3 +124,42 @@ def create_tables_process():
 
     print(colored("\n\tTables zijn aangemaakt", "yellow"))
     sql_closer(db, cursor)
+
+# Voornamelijk gemaakt door: Kenny van den Berg, Studentnummer: 1777503, Ceyhun Cakir, Studentnummer: 1784480
+def transfer_data_process():
+    """
+    start het transfer database process.
+    """
+    mongo_db_names = mongo_database_names()
+    print("\n\t", mongo_db_names)
+
+    while True:
+        database = input(colored("\n\tGeef je MongoDB database op: > ", "yellow"))
+        if database not in mongo_db_names:
+            print(colored("\n\tdie optie bestaat niet", "red"))
+        else:
+            break
+
+    user, passwd = give_user_password()
+    my_sql_database_names = get_mysql_database_names(user, passwd)
+    print("\n\t", my_sql_database_names)
+
+    while True:
+        my_sql_database = input(colored("\n\tGeef je Mysql database op: > ", "yellow"))
+        if my_sql_database not in my_sql_database_names:
+            print(colored("\n\tdie optie bestaat niet", "red"))
+        else:
+            break
+
+    print(colored("\n\tMysql tables word gevuld", "yellow"))
+    db, cursor = mysql_connector(user, passwd, my_sql_database)
+
+    delete_database(my_sql_database, cursor)
+    create_predefined_tables(cursor, my_sql_database)
+
+    end, start = get_item_from_collection(db, cursor, database)
+
+    print(colored("\n\tMysql tables zijn gevuld", "green"))
+    print("\n\tTotal time taken, " + str(round(end - start, 6)) + " seconds", "green")
+
+    sql_closer(db, cursor)
