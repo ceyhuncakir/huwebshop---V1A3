@@ -117,10 +117,13 @@ def recommendation_main_category(login_dict):
 
     # voor elke profiel
     for i in profielen:
-        # Bepaal de main category die bij het profiel.
-        profiel_id, vergelijking = main_category_rec(cursor, i[0])
-        # insert alle recomondation producten weer in de database.
-        insert_values(0, profiel_id, vergelijking, db, cursor, "main_category_rec", "id", "product_1", "product_2", "product_3", "product_4" )
+        try:
+            # Bepaal de main category die bij het profiel.
+            profiel_id, vergelijking = main_category_rec(cursor, i[0])
+            # insert alle recomondation producten weer in de database.
+            insert_values(0, profiel_id, vergelijking, db, cursor, "main_category_rec", "id", "product_1", "product_2", "product_3", "product_4" )
+        except TypeError:
+            continue
 
     sql_closer(db, cursor)
     end = time.time()
