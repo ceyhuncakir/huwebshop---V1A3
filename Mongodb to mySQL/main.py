@@ -337,3 +337,43 @@ def edit_key_data(products_list, db):
         item[11] = sub_category[item[11]]
     # print(products_list)
     return products_list
+
+
+#  Voornamelijk gemaakt door Kenny van den berg Studentnummer: 1777503 en Ceyhun Cakir, Studentnummer: 1784480
+def insert_values(direction, list_value, db, cursor, table, *column):
+    """
+    Connect aan de database en loop door de verschillende waardes in de list en voeg ze die dan toe aan de table collums.
+    Execute deze command en commit het naar de sql database.
+    :param direction:, :param list_value:, :param db:, :param cursor:, :param table:, :param *column:, :return:,
+    """
+    # Switch between diffrent direction for table insert
+    if direction == 0:
+        category_list_sql = "INSERT IGNORE INTO " + table + " (" + column[0] + ") VALUES (%s)"
+        for item in list_value:
+            category_list_sql_value = (item, )
+            cursor.execute(category_list_sql, category_list_sql_value)
+
+    elif direction == 1:
+        category_list_sql = "INSERT IGNORE INTO " + table + " (" + column[0] + ", " + column[1] + ", " + column[2] + ") VALUES (%s, %s, %s)"
+        for item in list_value:
+            category_list_sql_value = (item[0], item[1], item[2])
+            cursor.execute(category_list_sql, category_list_sql_value)
+
+    elif direction == 2:
+        category_list_sql = "INSERT IGNORE INTO " + table + " (" + column[0] + ", " + column[1] + ", " + column[2] + ", " + column[3] + ", " + column[4] + ", " + column[5] + ", " + column[6] + ", " + column[7] + ", " + column[8] + ", " + column[9] + ", " + column[10] + ", " + column[11] + ") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        for list1 in list_value:
+            category_list_sql_value = (list1[0], list1[1], list1[2], list1[3], list1[4], list1[5], list1[6], list1[7], list1[8], list1[9], list1[10], (list1[11]))
+            cursor.execute(category_list_sql, category_list_sql_value)
+
+    elif direction == 3:
+        category_list_sql = "INSERT IGNORE INTO " + table + " (" + column[0] + ", " + column[1] + ", " + column[2] + ", " + column[3] + ") VALUES (%s, %s, %s, %s)"
+        for item in list_value:
+            category_list_sql_value = (item[0], item[1], item[2], item[3])
+            cursor.execute(category_list_sql, category_list_sql_value)
+
+    elif direction == 4:
+        category_list_sql = "INSERT IGNORE INTO " + table + " (" + column[0] + ", " + column[1] + ", " + column[2] + ") VALUES (%s, %s, %s)"
+        for item in list_value:
+            category_list_sql_value = (item[0], item[1], item[2])
+            cursor.execute(category_list_sql, category_list_sql_value)
+    db.commit()
