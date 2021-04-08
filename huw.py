@@ -3,6 +3,8 @@ import random, os, json, urllib.parse, requests
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
+import mysql.connector
+from random import sample
 
 # The secret key used for session encryption is randomly generated every time
 # the server is started up. This means all session data (including the
@@ -33,7 +35,7 @@ class HUWebshop(object):
 
     productfields = ["name", "price.selling_price", "properties.discount", "images"]
 
-    recommendationtypes = {'popular':"Anderen kochten ook",'similar':"Soortgelijke producten",'combination':'Combineert goed met','behaviour':'Passend bij uw gedrag','personal':'Persoonlijk aanbevolen'}
+    recommendationtypes = {'popular':"Aanbevolen voor jou",'similar':"Mogelijk interesant voor jou",'combination':'Passend bij uw gedrag','behaviour':'Passend bij uw gedrag','personal':'Persoonlijk aanbevolen'}
 
     """ ..:: Initialization and Category Index Functions ::.. """
 
@@ -105,6 +107,7 @@ class HUWebshop(object):
         self.app.add_url_rule('/change-profile-id', 'profielid', self.changeprofileid, methods=['POST'])
         self.app.add_url_rule('/add-to-shopping-cart', 'toevoegenaanwinkelmand', self.addtoshoppingcart, methods=['POST'])
         self.app.add_url_rule('/remove-from-shopping-cart', 'verwijderenvanwinkelmand', self.removefromshoppingcart, methods=['POST'])
+        self.app.add_url_rule('/get-products-from-keuzevraag', 'keuzevraagproducts', self.keuzevraag, methods=['POST'])
         self.app.add_url_rule('/producten/pagination-change', 'aantalperpaginaaanpassen', self.changepaginationcount, methods=['POST'])
 
     def createcategoryindex(self):
@@ -337,6 +340,35 @@ class HUWebshop(object):
                 session['shopping_cart'][ind] = (session['shopping_cart'][ind][0], session['shopping_cart'][ind][1] - 1)
         session['shopping_cart'] = session['shopping_cart']
         return '{"success":true, "itemcount":'+str(self.shoppingcartcount())+'}'
+
+    def keuzevraag(self):
+        list = []
+
+        optie1 = request.form.get('optie_1')
+        optie2 = request.form.get('optie_2')
+        optie3 = request.form.get('optie_3')
+
+        db = mysql.connector.connect(host="localhost", user="root", password="", database="test")
+        cursor = db.cursor()
+
+        cursor.execute("SELECT * FROM `keuzehulp` WHERE 1")
+        keuzehulp_combi = cursor.fetchall()
+
+        for i in keuzehulp_combi:
+            list.append([i[0], i[1], i[2], i[3]])
+
+        for i in range(len(list)):
+            optieslist = []
+            if optie1 == list[i][1] and optie2 == list[i][2] and optie3 == list[i][3]:
+                cursor.execute("SELECT product_id FROM `keuzehulp` WHERE optie_1 = %s AND optie_2 = %s AND optie_3 = %s", (optie1, optie2, optie3))
+                opties = cursor.fetchall()
+                for data in opties:
+                    optieslist.append(data[0])
+                random = sample(optieslist, 1)
+                return '{"success":true, "refurl": "http://localhost:5000/productdetail/' + random[0] + '"}'
+
+        cursor.close()
+        db.close()
 
     def changepaginationcount(self):
         """ This function changes the number of items displayed on the product
