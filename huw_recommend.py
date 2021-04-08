@@ -36,7 +36,30 @@ class Recom(Resource):
         prodids = self.get_recommendation(profileid, direction)
         return prodids, 200
 
+    def get_recommendation(self, current_id, direction):
+        db = mysql.connector.connect(host="localhost", user="root", password="", database="test")
+        cursor = db.cursor()
+        # Varible list with all the table's
+        if direction == 1:
+            content = ["gender_recommendation", "recommendation_profile_orders"]
+        elif direction == 2:
+            content = ["main_category_rec", "gender_recommendation", "recommendation_profile_orders"]
+        elif direction == 3:
+            content = ["sub_category_recommendation", "main_category_rec", "gender_recommendation", "recommendation_profile_orders"]
 
+        response = []
+        # for each item in content try
+        for item in content:
+            print(item)
+            current_id_quotes = "'" + str(current_id) + "'"
+            response = self.get_products(cursor, item, current_id_quotes)
+            if response:
+                break
+        cursor.close()
+        db.commit()
+        db.close()
+        return list(response[0])
+        
 # This method binds the Recom class to the REST API, to parse specifically
 # requests in the format described below.
 api.add_resource(Recom, "/<string:profileid>/<int:count>")
