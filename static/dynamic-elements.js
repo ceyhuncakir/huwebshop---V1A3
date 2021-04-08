@@ -1,6 +1,5 @@
-
 $(document).ready(function() {
-	
+
 	// These functions deal with the profile bar at the top of every page; be it
 	// through hiding and showing the different types of bar, or through sending
 	// the actual request that changes the profile ID for a given session.
@@ -17,9 +16,9 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 
-	$("[function=change-profile-id]").click(function(event){ 
+	$("[function=change-profile-id]").click(function(event){
 		$("#profilebar-error").attr("style","display:none");
-		$.ajax({url:"/change-profile-id", method:"POST", data:{"profile_id":$("input#profile-id-input").val()}}).done(function(data){ 
+		$.ajax({url:"/change-profile-id", method:"POST", data:{"profile_id":$("input#profile-id-input").val()}}).done(function(data){
 			response = JSON.parse(data);
 			if(response.success){
 				location.reload();
@@ -29,7 +28,8 @@ $(document).ready(function() {
 		});
 		event.preventDefault();
 	});
-	
+
+
 
 	// These functions deal with dynamically showing and hiding the main menu
 	// subcategory dropdowns.
@@ -65,17 +65,41 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 
+	$("a[function=get-products-from-keuzevraag]").click(function(event){
+		// zo pak je de input van de user choise
+		var optie_1 = $('#optie').find(":selected").text();
+		var optie_2 = $('#optie_2').find(":selected").text();
+		var optie_3 = $('#optie_3').find(":selected").text();
+
+		$.ajax({url:"/get-products-from-keuzevraag", method:"POST", data: {"optie_1": optie_1, "optie_2": optie_2, "optie_3": optie_3}}).done(function(data){
+			response = JSON.parse(data);
+			if(response.success){
+				window.location = response.refurl;
+			}
+		});
+		event.preventDefault();
+	});
+
 
 	// This function submits the request for changing the displayed number of
 	// items per page.
 
-	$("select#pagination-select").change(function(){ 
-		$.ajax({url:"/producten/pagination-change", method:"POST", data:{"refurl": window.location.pathname, "items_per_page": $(this).val()}}).done(function(data){ 
+	$("select#pagination-select").change(function(){
+		$.ajax({url:"/producten/pagination-change", method:"POST", data:{"refurl": window.location.pathname, "items_per_page": $(this).val()}}).done(function(data){
 			response = JSON.parse(data);
 			if(response.success){
 				window.location.href = response.refurl;
 			}
 		});
 	});
+
+	document.getElementById("open-popup-btn").addEventListener("click",function(){
+	document.getElementsByClassName("popup")[0].classList.add("active");
+	});
+
+	document.getElementById("dismiss-popup-btn").addEventListener("click",function(){
+		document.getElementsByClassName("popup")[0].classList.remove("active");
+	});
+
 
 });
