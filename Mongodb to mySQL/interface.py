@@ -163,3 +163,24 @@ def transfer_data_process():
     print("\n\tTotal time taken, " + str(round(end - start, 6)) + " seconds", "green")
 
     sql_closer(db, cursor)
+
+
+# Voornamelijk gemaakt door: Kenny van den Berg, Studentnummer: 1777503, Ceyhun Cakir, Studentnummer: 1784480
+def delete_database_process():
+    """
+    start het delete database process. vraag je om een user & password input en gebruik get_mysql_database_names()
+    om mysql databases namen te zien. Hier na wordt de functie delete_database om het ingegeven database te verwijderen.
+    """
+    user, passwd = give_user_password()
+
+    database_names = get_mysql_database_names(user, passwd)
+    print(database_names)
+
+    database = input(colored("\n\tGeef je mySQL database op: > ", "yellow"))
+    db, cursor = mysql_connector(user, passwd, database)
+
+    delete_database(database, cursor)
+    sql_closer(db, cursor)
+
+
+menu()
