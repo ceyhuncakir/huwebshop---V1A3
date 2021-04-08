@@ -289,3 +289,24 @@ def get_item_from_collection(db, cursor, database):
 
     end, start = insert_into_mysql_process(db, cursor, products_value_item, product_categorie_list, profiles_previously_recommended, profiles_values, sessions_date_to_from, sessions_orders)
     return end, start
+
+#  Voornamelijk gemaakt door Wytze A. Ketel, Studentnummer: 1797080
+def retrieve_tabel_data(table, db):
+    """
+    Bouw een dictionary en vul deze met alle data in een tabel
+    :param table:
+    :param db:
+    :return:
+    """
+    # divine a dictonary
+    result_dict = {}
+    cursor = db.cursor()
+
+    # retrieve all items from selected table
+    cursor.execute("SELECT * FROM " + table)
+    myresult = cursor.fetchall()
+
+    # for each item in myresult
+    for item in myresult:
+        result_dict[item[1]] = item[0]
+    return result_dict
