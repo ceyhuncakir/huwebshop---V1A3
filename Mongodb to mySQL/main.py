@@ -154,3 +154,14 @@ def try_except_flex(*value):
             return value[1][value[2]][value[3]]
     except:
         return "None"
+
+
+# Voornamelijk gemaakt door: izabelle Auriaux, Studentnummer: 1762808
+def setting_list(list_value):
+    """
+    Maakt van list_value een set list, en retured deze.
+    :param list_value:
+    :return:
+    """
+    list_category_value = list(set(list_value))
+    return list_category_value
