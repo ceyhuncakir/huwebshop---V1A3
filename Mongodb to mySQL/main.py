@@ -45,3 +45,28 @@ def sql_closer(db, cursor):
     cursor.close()
     db.commit()
     db.close()
+
+def get_mysql_database_names(user, passwd):
+    """
+    Maakt verbinding met de DB en haalt alle database namen op.
+    Voegt de namen aan een lijst toe en geeft deze terug.
+    :param user: 
+    :param passwd:
+    :return: lijst van database namen
+    """
+    # list variable for the databases
+    db, cursor = mysql_connector(user, passwd, " ")
+    database_name_list = []
+
+    # Execute sql query to retrieve all database names
+    cursor.execute("SHOW DATABASES")
+
+    # varible with all items found
+    database_names = cursor.fetchall()
+    sql_closer(db, cursor)
+
+    # retrieve the database names from with in a list with in a list
+    for item in database_names:
+        for db_name in item:
+            database_name_list.append(db_name)
+    return database_name_list
