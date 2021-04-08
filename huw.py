@@ -35,7 +35,7 @@ class HUWebshop(object):
 
     productfields = ["name", "price.selling_price", "properties.discount", "images"]
 
-    recommendationtypes = {'popular':"Aanbevolen voor jou",'similar':"Mogelijk interesant voor jou",'combination':'Passend bij uw gedrag','behaviour':'Passend bij uw gedrag','personal':'Persoonlijk aanbevolen'}
+    recommendationtypes = {'voor jou':"Aanbevolen voor jou",'similar':"Mogelijk interesant voor jou",'combination':'Passend bij uw gedrag','behaviour':'Passend bij uw gedrag','personal':'Persoonlijk aanbevolen'}
 
     """ ..:: Initialization and Category Index Functions ::.. """
 
@@ -224,6 +224,7 @@ class HUWebshop(object):
         packet['shopping_cart_count'] = self.shoppingcartcount()
         return render_template(template, packet=packet)
 
+
     """ ..:: Recommendation Functions ::.. """
 
     def recommendations(self, count, direction):
@@ -232,7 +233,7 @@ class HUWebshop(object):
         service. At the moment, it only transmits the profile ID and the number
         of expected recommendations; to have more user information in the REST
         request, this function would have to change."""
-        resp = requests.get(self.recseraddress+"/"+session['profile_id']+"/"+str(count))
+        resp = requests.get(self.recseraddress+"/"+session['profile_id']+"/"+direction+"/"+str(count))
         if resp.status_code == 200:
             recs = eval(resp.content.decode())
             queryfilter = {"_id": {"$in": recs}}
