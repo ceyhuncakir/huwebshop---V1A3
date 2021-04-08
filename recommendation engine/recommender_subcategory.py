@@ -70,4 +70,39 @@ def get_sub_category_recommendation(cursor, profileid):
     # hier pakken we random 4 producten uit de top 10 lijst van producten
     return profileid, random.sample(sim_prod, 4), sub_category
 
+def recommendation_subcategory(login_dict):
+    """
+    Zend data naar de juiste tabel in DB
+    :param mysql_username
+    :param mysql_password
+    :param mysql_database
+    :return
+    """
 
+    db, cursor = mysqlConnectie(login_dict)
+
+    #hier word de verwijdering van de tabellen gedaan
+    delete_table(cursor, "sub_category_profiles")
+    delete_table(cursor, "sub_category_recommendation")
+
+    #hier worden de tabellen aangemaakt
+    create_rule_table(cursor, "sub_category_recommendation", "", 1)
+    create_rule_table(cursor, "sub_category_profiles", "sub_category", 2)
+
+    #orders worden opgehaald
+    profiles = retrieve_order_profiles(cursor)
+
+    for i in profiles:
+        #hier gebeurt een try and catch door naar te kijken of er gevonden producten minder dan 4 zijn als dat zo is er een continue anders try die de insert
+        try:
+            profile_content, recommendation_content, sub_category = get_sub_category_recommendation(cursor, i[0])
+            insert_values(0, profile_content, recommendation_content, db, cursor, "sub_category_recommendation", "id", "product_1", "product_2", "product_3", "product_4")
+            insert_values(1, profile_content, sub_category, db, cursor, "sub_category_profiles", "id", "sub_category")
+        except TypeError:
+            continue
+
+    start = time.time()
+
+    end = time.time()
+    sql_closer(db, cursor)
+    return end, start
