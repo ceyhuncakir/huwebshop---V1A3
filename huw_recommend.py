@@ -59,7 +59,21 @@ class Recom(Resource):
         db.commit()
         db.close()
         return list(response[0])
-        
+
+    def get_products(self, cursor, content, current_id):
+        """
+        For the given table and profile id retrieve the products. if there is no corresponding id return a empty list
+        """
+        # Try mysql querry
+        try:
+            query = "SELECT product_1, product_2, product_3, product_4 FROM %s WHERE id = %s" % (
+            content, current_id)
+            cursor.execute(query)
+            data = cursor.fetchall()
+        except:
+            data = []
+        return data
+
 # This method binds the Recom class to the REST API, to parse specifically
 # requests in the format described below.
 api.add_resource(Recom, "/<string:profileid>/<int:count>")
