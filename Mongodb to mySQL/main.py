@@ -165,3 +165,127 @@ def setting_list(list_value):
     """
     list_category_value = list(set(list_value))
     return list_category_value
+
+
+# voornamelijk gemaakt door: Ceyhun Cakir, Studentnummer: 1784480 en Kenny van den berg Studentnummer: 1777503
+def get_item_from_collection(db, cursor, database):
+    """
+    Maak een lege list voor de verschillende categorieen producten, merken, gender, doelgroep, sub cat & sub sub cat.
+    Maak hiervoor ook lists die een profiel gaan voorstellen. En lege lists die collecties voorstellen.
+    Daarna connect je met de mongo database en haal je de data op uit de database, deze verdeel je via de lege list waar het toebehoorend is.
+    uiteindelijk geef je het door naar insert_into_mysql.
+    :param db:
+    :param cursor:
+    :param database:
+    :return:
+    """
+    # Opslaan van de values van collection products
+    products_value_item = []
+
+    # Categories of products
+    product_categorie_list = [[], [], [], [], []]
+
+    # Opslaan van de values van collection profiles
+    profiles_values = []
+    profiles_previously_recommended = []
+    profiles_sessions_list = {}
+
+    #opslaan van de values van collection sessions
+    sessions_date_to_from = []
+    sessions_orders = []
+
+    #connectie naar het mongodb database
+    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+    # Retrieve a list of all collections
+    collections = mongo_client[database]
+
+    # retrieve collections products, sessions and profiles
+    collection_products = collections["products"]
+
+    collection_session = collections["sessions"]
+
+    collection_profile = collections["profiles"]
+
+    # for loop voor het ophalen van data vanuit MongoDB
+    for item in collection_products.find({}, {"_id", "price", "properties", "flavor", "properties", "recommendable", "fast_mover", "brand", "gender", "properties", "sub_category", "sub_sub_category"}):
+        product_value_one = []
+        product_value_one.append(try_except_flex(0, item, "_id"))                            # Id = index 0
+        product_value_one.append(try_except_flex(1, item, "price", "selling_price"))         # Price = index 1
+        product_value_one.append(try_except_flex(1, item, "properties", "stock"))            # Stock = index 2
+        product_value_one.append(try_except_flex(0, item, "flavor"))                         # Flavor = index 3
+        product_value_one.append(try_except_flex(1, item, "properties", "kleur"))
+        product_value_one.append(try_except_flex(0, item, "recommendable"))
+        product_value_one.append(try_except_flex(0, item, "fast_mover"))
+        product_value_one.append(try_except_flex(0, item, "gender"))
+        product_value_one.append(try_except_flex(1, item, "properties", "doelgroep"))
+        product_value_one.append(try_except_flex(0, item, "brand"))
+        product_value_one.append(try_except_flex(0, item, "sub_category"))
+        product_value_one.append(try_except_flex(0, item, "sub_sub_category"))
+
+        products_value_item.append(product_value_one)
+
+        # data uithalen voor brand, gender, doelgroep, main_category, sub_category
+        product_categorie_list[0].append(try_except_flex(0, item, "brand"))                        # brand = index 0
+        product_categorie_list[1].append(try_except_flex(0, item, "gender"))                       # gender = index 1
+        product_categorie_list[2].append(try_except_flex(1, item, "properties", "doelgroep"))      # properties = index 2
+        product_categorie_list[3].append(try_except_flex(0, item, "sub_category"))                 # sub_category = index 3
+        product_categorie_list[4].append(try_except_flex(0, item, "sub_sub_category"))             # sub_sub_category = index 4
+
+
+    for item in collection_profile.find({}, {"_id", "buids", "previously_recommended", "order"}):
+        column_id = try_except_flex(0,item, "_id")
+        profiles_values.append([str(try_except_flex(0, item, "_id")), str(try_except_flex(1,item, "order", "first")),
+                                str(try_except_flex(1, item, "order", "latest"))])
+
+        column_buid = try_except_flex(0, item, "buids")
+
+        # if there are multiple build loop through the list and add each buid and profile id to a dictionary
+        if type(column_buid) == list:
+            for index_item in column_buid:
+                profiles_sessions_list[index_item] = str(column_id)
+
+
+    for item in collection_session.find({}, {"buid", "session_start", "session_end", "order"}):
+        column_start = try_except_flex(0, item, "session_start")
+        column_end = try_except_flex(0, item, "session_end")
+        column_buid = try_except_flex(0, item, "buid")
+
+        id = try_except_flex(0, item, "_id")
+        order = try_except_flex(0, item, "order")
+
+        item_dict = {}
+        item_list = []
+
+        # if order is a dictionary
+        if type(order) == dict:
+
+            # for each product in the order
+            for item in order['products']:
+                # if the item is not in the dict, create item key and value 1
+                if item['id'] not in item_dict:
+                    item_dict[item['id']] = 1
+                # else increment the value with one
+                else:
+                    item_dict[item['id']] += 1
+
+            # for each key, value in item dict append the value, key and id.
+            for key, value in item_dict.items():
+                item_list.append([value, key, str(id)])
+
+        # if the length of the list is not 0 append item
+        if len(item_list) != 0:
+            for item in item_list:
+                sessions_orders.append(item)
+
+        # Retrieve correct id build of profile to sessions.
+        try:
+            id_buid = profiles_sessions_list[column_buid[0]]
+        except (TypeError, KeyError):
+            id_buid = "None"
+
+        sessions_date_to_from.append([str(id), str(column_start), str(column_end), id_buid])
+    mongo_client.close()
+
+    end, start = insert_into_mysql_process(db, cursor, products_value_item, product_categorie_list, profiles_previously_recommended, profiles_values, sessions_date_to_from, sessions_orders)
+    return end, start
