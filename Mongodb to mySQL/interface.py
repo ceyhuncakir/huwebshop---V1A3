@@ -34,3 +34,15 @@ def mysql_rules():
     3: sessions (table) | (Columns): ()\n
     @============================================================================================@\n
     ''', colors[randrange(2)]))
+
+# Voornamelijk gemaakt door: izabelle Auriaux, Studentnummer: 1762808,
+def opties():
+    print(colored('''
+    @====================================== Menu opties =========================================@\n
+    1: Automatisch aanmaken van het predifined mySQL tables
+    2: Overzetten van big data vanuit (mongoDB) naar (mySQL)
+    3: Verwijderen van mySQL database table
+    4: Error menu
+    5: Quit program\n
+    @============================================================================================@\n
+    ''', colors[randrange(2)]))
