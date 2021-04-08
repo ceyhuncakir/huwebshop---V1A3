@@ -100,3 +100,12 @@ def menu():
             optie = 0
         except mysql.connector.Error as e:
             error_list.append(e)
+
+# Voornamelijk gemaakt door: Wytze A. Ketel, Studentnummer: 1797080
+def give_user_password():
+    """"
+    Ontvang username en passwoord
+    """
+    user = input(colored("\n\tGeef je mySQL username op: > ", "yellow"))
+    passwd = input(colored("\n\tGeef je mySQL password op: > ", "yellow"))
+    return user, passwd
