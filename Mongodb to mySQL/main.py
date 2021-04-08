@@ -89,3 +89,24 @@ def retrieve_mysql_table_names(cursor):
         for table in index:
             list_tables.append(table)
     return list_tables
+
+
+
+# voornamelijk gemaakt door: izabelle Auriaux, Studentnummer: 1762808 en Wytze A. Ketel, Studentnummer: 1797080
+def delete_database(database_name, cursor):
+    """
+    Je maakt een variable die een "drop database" quarry en een database inhoud
+    en een variable die een "create database" quarry en een database inhoud.
+    Vervolgens excecute je deze variable via de cursor.
+    Daarna print je dat de tables zijn verwijdert. Als er een exception tussen zit word de mysql_error_print opgeroepen.
+    :param cursor:
+    :param database_name:
+    :return:
+    """
+    # 2 varibles with my sql queries
+    drop_query = "DROP DATABASE " + database_name
+    create_query = "CREATE DATABASE " + database_name
+
+    # Execute sql query drop and create
+    cursor.execute(drop_query)
+    cursor.execute(create_query)
