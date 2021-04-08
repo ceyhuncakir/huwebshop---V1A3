@@ -3,8 +3,7 @@ from flask_restful import Api, Resource, reqparse
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
-import random
-
+import mysql.connector
 
 app = Flask(__name__)
 api = Api(app)
@@ -29,12 +28,13 @@ class Recom(Resource):
     """ This class represents the REST API that provides the recommendations for
     the webshop. At the moment, the API simply returns a random set of products
     to recommend."""
-
+    #  shopping_card,
     def get(self, profileid, direction, count):
 
         # gender recommendation
         prodids = self.get_recommendation(profileid, direction)
         return prodids, 200
+
 
     def get_recommendation(self, current_id, direction):
         db = mysql.connector.connect(host="localhost", user="root", password="", database="test")
@@ -74,6 +74,7 @@ class Recom(Resource):
             data = []
         return data
 
+
 # This method binds the Recom class to the REST API, to parse specifically
 # requests in the format described below.
-api.add_resource(Recom, "/<string:profileid>/<int:count>")
+api.add_resource(Recom, "/<string:profileid>/<int:direction>/<int:count>")
