@@ -18,3 +18,18 @@ def mongo_database_names():
     # Close connection
     mongo_client.close()
     return db_names
+
+# Voornamelijk gemaakt door: izabelle Auriaux, Studentnummer: 1762808
+def mysql_connector(user, password, db_name):
+    """
+    Hier verbind je met de database aan de hand van een host, username, wachtwoord en database naam. Die aanmeldings informatie sla je op onder een
+    variable. Ook maak je een cursor die de vorige variable gebruikt om aan te melden.
+    Je returned de variabele met de aanmeldingsgegevens en de cursor.
+    :param user:, :param password:, :param db_name:
+    """
+    # Variable with a connection with mysql with the user, password and db_name
+    db = mysql.connector.connect(host="localhost", user=user, password=password, database=db_name)
+
+    # Variable for mysql cursor
+    cursor = db.cursor()
+    return db, cursor
