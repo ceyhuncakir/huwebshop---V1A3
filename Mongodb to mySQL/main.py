@@ -377,3 +377,45 @@ def insert_values(direction, list_value, db, cursor, table, *column):
             category_list_sql_value = (item[0], item[1], item[2])
             cursor.execute(category_list_sql, category_list_sql_value)
     db.commit()
+
+
+# #  Voornamelijk gemaakt door Ceyhun Cakir, Studentnummer: 1784480 en Kenny van den berg Studentnummer: 1777503
+def insert_into_mysql_process(db, cursor, products_list, product_categorie_list, profiles_previously_recommended, profiles_values, sessions_date_to_from, sessions_orders):
+    """
+    Connect aan de database, gebruik de loop_through_value() om de verschillende waarde aan de bijbehoorende table toe te voegen.
+    Start de tijd aan het begin van dit proces en stop het wanneer het klaar is. Uiteindelijk word er geprint dat dit is gelukt. Ook de tijd
+    wordt getoond.
+    :param db:, :param cursor:, :param products_list:, :param product_categorie_list:, :param profiles_previously_recommended:
+    :param profiles_values:, :param sessions_date_to_from:, :param sessions_orders:
+    """
+
+    start = time.time()
+
+    # duplicates of the same category are filtered out to retrieve a list with one of each category item,
+    set_brand_list = setting_list(product_categorie_list[0])
+    set_gender_list = setting_list(product_categorie_list[1])
+    set_doelgroep_list = setting_list(product_categorie_list[2])
+    set_sub_category_list = setting_list(product_categorie_list[3])
+    set_sub_sub_category_list = setting_list(product_categorie_list[4])
+
+    # Insert values into the brand tabels.
+    insert_values(0, set_brand_list, db, cursor, "brand", "brand")
+    insert_values(0, set_gender_list, db, cursor, "gender", "gender")
+    insert_values(0, set_doelgroep_list, db, cursor, "doelgroep", "doelgroep")
+    insert_values(0, set_sub_category_list, db, cursor, "main_category", "main_category")
+    insert_values(0, set_sub_sub_category_list, db, cursor, "sub_category", "sub_category")
+
+    # Edit products based on there categorty
+    products_list = edit_key_data(products_list, db)
+
+    # Insert products, profiles, sessions and orders into MySql database.
+    insert_values(2, products_list, db, cursor, "products", "id", "price", "stock", "flavor", "kleur", "recomendable", "fast_mover", "gender_id_key", "doelgroep_id_key", "brand_id_key", "main_category_id_key", "sub_category_id_key")
+
+    insert_values(1, profiles_values, db, cursor, "profiles", "id", "first_order_item", "last_order_item")
+
+    insert_values(3, sessions_date_to_from, db, cursor, "sessions", "id", "date_from", "date_to", "profiles_id_key")
+
+    insert_values(4, sessions_orders, db, cursor, "orders", "aantal", "products_id_key", "sessions_id_key")
+
+    end = time.time()
+    return end, start
