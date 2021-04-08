@@ -50,7 +50,7 @@ def get_mysql_database_names(user, passwd):
     """
     Maakt verbinding met de DB en haalt alle database namen op.
     Voegt de namen aan een lijst toe en geeft deze terug.
-    :param user: 
+    :param user:
     :param passwd:
     :return: lijst van database namen
     """
@@ -70,3 +70,22 @@ def get_mysql_database_names(user, passwd):
         for db_name in item:
             database_name_list.append(db_name)
     return database_name_list
+
+# voornamelijk gemaakt door: Ceyhun Cakir, Studentnummer: 1784480 en Wytze A. Ketel, Studentnummer: 1797080
+def retrieve_mysql_table_names(cursor):
+    """"
+    Execute een query voor het opvragen van alle tabelen in de database. Return een lijst aan table namen.
+    :param cursor:
+    """
+    # list for all tables
+    list_tables = []
+
+    # retrieve all tables
+    cursor.execute("SHOW TABLES")
+    tables = cursor.fetchall()
+
+    # append each table to list_tables
+    for index in tables:
+        for table in index:
+            list_tables.append(table)
+    return list_tables
