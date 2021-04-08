@@ -46,3 +46,13 @@ def opties():
     5: Quit program\n
     @============================================================================================@\n
     ''', colors[randrange(2)]))
+
+# Voornamelijk gemaakt door: Ceyhun Cakir, Studentnummer: 1784480,
+def table_remove_options():
+
+    print(colored('''
+    @====================================== Delete Table Options ================================@\n
+    1: Verwijder alle tables
+    2: Verwijder geselecteerde table\n
+    @============================================================================================@\n
+    ''', colors[randrange(3)]))
