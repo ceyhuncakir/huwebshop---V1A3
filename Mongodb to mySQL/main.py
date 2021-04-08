@@ -33,3 +33,15 @@ def mysql_connector(user, password, db_name):
     # Variable for mysql cursor
     cursor = db.cursor()
     return db, cursor
+
+
+# Voornamelijk gemaakt door: izabelle Auriaux, Studentnummer: 1762808 en Wytze A. Ketel, Studentnummer: 1797080
+def sql_closer(db, cursor):
+    """
+    Sluit de cursor en commit de veranderingen van de database daarna sluit de database.
+    :param cursor:, :param db:
+    """
+    # Close the cursor, commit de change made in the database and close the database
+    cursor.close()
+    db.commit()
+    db.close()
