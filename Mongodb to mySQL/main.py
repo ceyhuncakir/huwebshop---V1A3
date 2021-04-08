@@ -310,3 +310,30 @@ def retrieve_tabel_data(table, db):
     for item in myresult:
         result_dict[item[1]] = item[0]
     return result_dict
+
+
+# Voornamelijk gemaakt door Kenny van den berg Studentnummer: 1777503
+def edit_key_data(products_list, db):
+    """
+    Roep voor iedere category de functie retrieve_tabel_data op. loop door de geven lijst en vergelijk of het product
+    item hetzelfde als als de dictionary item als dat het geval is verander het product item naar de dictonary key.
+    :param products_list:
+    :param db:
+    :return:
+    """
+    # retrieve all category table's and the rows
+    gender_dict = retrieve_tabel_data('gender', db)
+    doelgroep_dict = retrieve_tabel_data('doelgroep', db)
+    brand_dict = retrieve_tabel_data('brand', db)
+    main_category_dict = retrieve_tabel_data('main_category', db)
+    sub_category = retrieve_tabel_data('sub_category', db)
+
+    # loop trough the list and change the name of category to the table key
+    for item in products_list:
+        item[7] = gender_dict[item[7]]
+        item[8] = doelgroep_dict[item[8]]
+        item[9] = brand_dict[item[9]]
+        item[10] = main_category_dict[item[10]]
+        item[11] = sub_category[item[11]]
+    # print(products_list)
+    return products_list
