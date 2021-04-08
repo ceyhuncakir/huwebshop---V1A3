@@ -24,3 +24,13 @@ def banner():
     @============================================================================================@
 
     ''', colors[randrange(5)]))
+
+# Voornamelijk gemaakt door: Ceyhun Cakir, Studentnummer: 1784480,
+def mysql_rules():
+    print(colored('''
+    @=============================== MySQL database regels (voorbeeld) ==========================@\n
+    1: products (table) | (Columns): ()
+    2: profiles (table) | (Columns): ()
+    3: sessions (table) | (Columns): ()\n
+    @============================================================================================@\n
+    ''', colors[randrange(2)]))
