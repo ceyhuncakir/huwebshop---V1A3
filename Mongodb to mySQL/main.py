@@ -138,3 +138,19 @@ def create_predefined_tables(cursor, database_name):
     cursor.execute("CREATE TABLE orders (id INTEGER(10) AUTO_INCREMENT PRIMARY KEY UNIQUE, aantal INTEGER(10) NULL, products_id_key VARCHAR(255), sessions_id_key VARCHAR(255), FOREIGN KEY(products_id_key) REFERENCES products(id), FOREIGN KEY(sessions_id_key) REFERENCES sessions(id))")
 
     cursor.execute("CREATE TABLE already_recommended (id INTEGER(10) AUTO_INCREMENT PRIMARY KEY UNIQUE, profiles_id_key VARCHAR(255), products_id_key VARCHAR(255), FOREIGN KEY(profiles_id_key) REFERENCES profiles(id), FOREIGN KEY(products_id_key) REFERENCES products(id))")
+
+#  Voornamelijk gemaakt door Kenny van den berg Studentnummer: 1777503 en Ceyhun Cakir, Studentnummer: 1784480
+def try_except_flex(*value):
+    """
+    #     Gebruik een try except over de gegeven dict values, return  de dict value anders return je none
+    #     :param value:, :param value1:, :return value[value1], :except return "None"
+    #
+    """
+    # Een extra variable mee geven voor de keuze argument[0]
+    try:
+        if value[0] == 0:
+            return value[1][value[2]]
+        else:
+            return value[1][value[2]][value[3]]
+    except:
+        return "None"
